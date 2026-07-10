@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+
+# Build output
+dist/
+**/dist/
+out/
+**/out/
+
+# TypeScript
+*.tsbuildinfo
+
+# Drizzle migrations meta (keep the SQL files, ignore the meta folder)
+drizzle/meta/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Vite
+**/.vite/
+
+# Info Files
+project-setup.md
+project-setup-backend.md
+project-setup-frontend.md
