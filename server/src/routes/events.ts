@@ -102,6 +102,8 @@ router.post('/save', async (req: Request, res: Response) => {
 
         res.status(201).json(saved[0])
     } catch (error) {
+
+        console.error('Save event error:', error)
         res.status(500).json({ error: 'Failed to save event' })
     }
 })
@@ -111,6 +113,7 @@ router.get('/saved', async (req: Request, res: Response) => {
         const events = await db.select().from(savedEvents)
         res.json(events)
     } catch (error) {
+        console.error('Fetch saved events error:', error)
         res.status(500).json({ error: 'Failed to fetch saved events' })
     }
 })
@@ -133,6 +136,12 @@ router.delete('/saved/:id', async (req: Request, res: Response) => {
     } catch {
         res.status(500).json({ error: 'Failed to delete event' })
     }
+
+
+        // } catch (error) {
+        //     console.error('Delete event error:', error)
+        //     res.status(500).json({ error: 'Failed to delete event' })
+        // }
 })
 
 export default router
