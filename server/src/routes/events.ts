@@ -116,9 +116,11 @@ router.get('/saved', async (req: Request, res: Response) => {
 })
 
 router.delete('/saved/:id', async (req: Request, res: Response) => {
-    console.log('Delete request received for ID:', req.params.id) // Debugging line
-    console.log('Type of ID:', typeof req.params.id) // Debugging line
-    const id = parseInt(req.params.id)
+    // console.log('Delete request received for ID:', req.params.id) // Debugging line
+    // console.log('Type of ID:', typeof req.params.id) // Debugging line
+    // const id = parseInt(req.params.id)
+    // We are telling TypeScript that req.params.id is a string, so we can safely parse it to an integer. If it's not a valid number, we handle that case below.
+    const id = parseInt(req.params.id as string)
 
     if (isNaN(id)) {
         res.status(400).json({ error: 'Invalid ID' })
