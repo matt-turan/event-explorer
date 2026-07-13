@@ -53,7 +53,7 @@ export default function SearchPage() {
                         placeholder="City..."
                         value={city}
                         onChange={e => setCity(e.target.value)}
-                        className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 min-w-0 px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <button
                         type="submit"
