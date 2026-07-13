@@ -17,6 +17,7 @@ export default function SearchPage() {
         setError(null)
         try {
             const data = await searchEvents(keyword, city)
+            console.log('Search results:', data) // Log the search results for debugging
             setResults(data)
         } catch {
             setError('Failed to fetch events. Please try again.')
@@ -38,7 +39,7 @@ export default function SearchPage() {
         <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-6">Find Events</h1>
 
-            <form onSubmit={handleSearch} className="flex gap-3 mb-8">
+            <form onSubmit={handleSearch} className="flex flex-col md:max-w-[50%] gap-3 mb-8">
                 <input
                     type="text"
                     placeholder="Search keyword..."
@@ -46,20 +47,22 @@ export default function SearchPage() {
                     onChange={e => setKeyword(e.target.value)}
                     className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <input
-                    type="text"
-                    placeholder="City..."
-                    value={city}
-                    onChange={e => setCity(e.target.value)}
-                    className="w-40 px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="px-6 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
-                >
-                    {loading ? 'Searching...' : 'Search'}
-                </button>
+                <div className="flex gap-3 flex-row">
+                    <input
+                        type="text"
+                        placeholder="City..."
+                        value={city}
+                        onChange={e => setCity(e.target.value)}
+                        className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="min-w-32 px-6 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+                    >
+                        {loading ? 'Searching...' : 'Search'}
+                    </button>
+                </div>
             </form>
 
             {error && (
