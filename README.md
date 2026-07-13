@@ -6,8 +6,12 @@ This project is actively in development and serves as a practical exploration of
 
 ---
 
-The app is deployed and running. Date: 2026.07.13
+**UPDATE**
+
+The app is deployed and running.
+
 App Frontend: [Event Explorer](https://eventexplorer.scarletwingscreative.com/)
+
 Application backend is running on [Railway](https://railway.com/) cloud platform.
 
 ---
