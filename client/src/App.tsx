@@ -20,12 +20,17 @@ export default function App() {
           </div>
         </div>
       </nav>
-      <main className="max-w-5xl mx-auto px-6 py-8">
+      <main className="max-w-5xl mx-auto min-h-screen px-6 py-8">
         <Switch>
           <Route path="/" component={SearchPage} />
           <Route path="/saved" component={SavedPage} />
         </Switch>
       </main>
+      <footer className="bg-white border-t border-gray-200 px-6 py-4 mt-auto">
+        <div className="max-w-5xl mx-auto text-center text-sm text-gray-600">
+          &copy; {new Date().getFullYear()}  Mehmet Turan — Built with React, Vite, Tailwind CSS, and TypeScript
+        </div>
+      </footer>
     </div>
   )
 }
