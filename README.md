@@ -4,6 +4,10 @@ A full-stack event discovery application built with a modern TypeScript stack. U
 
 This project is actively in development and serves as a practical exploration of a production-relevant stack including Express, Drizzle ORM, Zod, React, and Vite.
 
+The app is deployed and running. Date: 2026.07.13
+App Frontend: [Event Explorer](https://eventexplorer.scarletwingscreative.com/)
+Application backend is running on [Railway](https://railway.com/) cloud platform.
+
 ---
 
 ## Architecture
