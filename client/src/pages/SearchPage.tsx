@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { searchEvents, saveEvent } from '../services/api'
 import type { Event, EventSearchResponse } from '../types/event'
 
@@ -24,10 +24,6 @@ export default function SearchPage() {
     ? Math.min(currentWindow * windowSize, results.totalPages)
     : windowSize
     console.log('windowEnd ', windowEnd)
-
-    // useEffect(() => {
-        
-    // }, [page])
 
     const handleSearch = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
