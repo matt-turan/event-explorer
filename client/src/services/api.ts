@@ -6,7 +6,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
 export const searchEvents = async (
     keyword: string,
     city: string,
-    page: number = 1
+    page: number,
 ): Promise<EventSearchResponse> => {
     const response = await axios.get(`${BASE_URL}/api/events/search`, {
         params: { keyword, city, page }

@@ -1,28 +1,66 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { searchEvents, saveEvent } from '../services/api'
 import type { Event, EventSearchResponse } from '../types/event'
 
 export default function SearchPage() {
     const [keyword, setKeyword] = useState('')
     const [city, setCity] = useState('')
+    const [page, setPage] = useState(1)
     const [results, setResults] = useState<EventSearchResponse | null>(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
+    // const [totalPages, setTotalPages] = useState(10) // New state for total pages
 
-    const handleSearch = async (e: React.SubmitEvent) => {
+    // Calculate which page numbers to show in the window
+    // Outside return, after your state declarations
+    const windowSize = 10
+    const currentWindow = Math.ceil(page / windowSize)
+    console.log('page ', page)
+    console.log('currentWindow ', currentWindow)
+    const windowStart = (currentWindow - 1) * windowSize + 1
+    console.log('windowStart ', windowStart)
+    const windowEnd = results
+    ? Math.min(currentWindow * windowSize, results.totalPages)
+    : windowSize
+    console.log('windowEnd ', windowEnd)
+
+    // useEffect(() => {
+        
+    // }, [page])
+
+    const handleSearch = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!keyword && !city) return
         setLoading(true)
         setError(null)
+        setPage(1)
         try {
-            const data = await searchEvents(keyword, city)
+            const data = await searchEvents(keyword, city, 1)
+            // const data = await searchEvents(keyword, city, 1)
             console.log('Search results:', data) // Log the search results for debugging
             setResults(data)
         } catch {
             setError('Failed to fetch events. Please try again.')
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handlePageChange = async (keyword: string, city: string, newPage: number) => {
+        console.log(`Changing to page: ${newPage} --- and current page: ${page}`) // Log the new page number for debugging
+        
+        if (newPage < 1 || (results && newPage > results.totalPages) ) return
+        // if (newPage > totalPages) {
+        //     setTotalPages(totalPages + 10) // Update totalPages if newPage exceeds it
+        // }
+        setPage(newPage)
+        try {
+            const data = await searchEvents(keyword, city, newPage)
+            console.log('Search results:', data) // Log the search results for debugging
+            setResults(data)
+        } catch {
+            setError('Failed to fetch events. Please try again.')
         }
     }
 
@@ -70,11 +108,15 @@ export default function SearchPage() {
             )}
 
             {results && (
-                <div>
+
+
+
+
+                <div className="flex flex-col min-h-screen">
                     <p className="text-sm text-gray-500 mb-4">
                         {results.total} events found
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         {results.events.map(event => (
                             <div
                                 key={event.id}
@@ -130,6 +172,73 @@ export default function SearchPage() {
                             </div>
                         ))}
                     </div>
+                    <ul className="w-full flex mt-auto justify-center">
+                        {results.totalPages > 0 && results.total > 10 && (
+                           <li
+                           className="mx-1 cursor-pointer p-2 text-gray-600 hover:text-gray-900"
+                                onClick={() => handlePageChange(keyword, city, page - 1)}
+                           >
+                                {`<`}
+                           </li>
+                        )}
+
+                        {windowStart > 1 && <li className="mx-1 p-2 text-gray-400">...</li>}
+
+                        {results.totalPages > 0 && results.total > 10 && (
+
+                            Array.from(
+                            {length: windowEnd - windowStart + 1 },
+                            (_, i) => {
+                                const pageNumber = windowStart + i
+                                const isActive = page === pageNumber
+
+                                return (
+                                    <li
+                                        key={pageNumber}
+                                        onClick={() => handlePageChange(keyword, city, pageNumber)}
+                                        className={`mx-1 cursor-pointer p-2 ${isActive ? 'font-bold text-blue-600 bg-blue-50' : 'text-gray-600'
+                                    }`}
+                                    >
+                                        {pageNumber}
+                                    </li>
+                                )
+                            })
+
+                            // Array.from({ length: results.totalPages < 10 ? results.totalPages : totalPages }, (elem, i) => {
+                            //     // console.log(`elem: ${elem} - index: ${i}`) // Log the current element and index for debugging;
+                            //     // if (totalPages > 10) {
+
+                            //     // }
+                            //     const pageNumber = i + 1;
+                            //     // console.log(`pageNumber: ${pageNumber}, current page: ${page}`) // Log the current page number and the active page for debugging
+                            //     const isActive = page === pageNumber; // Compares if this loop item is the active page
+
+                            //     return (
+                            //         <li
+                            //             key={i}
+                            //             onClick={() => handlePageChange(keyword, city, pageNumber)}
+                            //             className={`
+                            //             mx-1 cursor-pointer p-2
+                            //             ${isActive ? 'font-bold text-blue-600 bg-blue-50' : 'text-gray-600'}
+                            //             `}
+                            //         >
+                            //             {pageNumber}
+                            //         </li>
+                            //     )
+                            // })
+                        )}
+
+                        {windowEnd < results.totalPages && <li className="mx-1 p-2 text-gray-400">...</li>}
+
+                        {results.totalPages > 10 && results.total > 10 && (
+                            <li
+                                className="mx-1 cursor-pointer p-2 text-gray-600 hover:text-gray-900"
+                                onClick={() => handlePageChange(keyword, city, page + 1)}
+                            >
+                                {`>`}
+                            </li>
+                        )}
+                    </ul>
                 </div>
             )}
         </div>
