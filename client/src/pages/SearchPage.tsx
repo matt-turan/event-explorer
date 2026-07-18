@@ -1,16 +1,23 @@
 import { useState } from 'react'
 import { searchEvents, saveEvent } from '../services/api'
 import type { Event, EventSearchResponse } from '../types/event'
+// import { useSearchStore } from '../stores/searchStore'
 
 export default function SearchPage() {
     const [keyword, setKeyword] = useState('')
     const [city, setCity] = useState('')
     const [page, setPage] = useState(1)
     const [results, setResults] = useState<EventSearchResponse | null>(null)
+    const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
-    // const [totalPages, setTotalPages] = useState(10) // New state for total pages
+    
+
+    // const {
+    //     keyword, city, page, results, savedIds,
+    //     setKeyword, setCity, setPage, setResults, addSavedId
+    // } = useSearchStore()
+
 
     // Calculate which page numbers to show in the window
     // Outside return, after your state declarations
@@ -64,6 +71,10 @@ export default function SearchPage() {
         try {
             await saveEvent(event)
             setSavedIds(prev => new Set(prev).add(event.id))
+            // addSavedId({(
+                
+            //     (prev) => {new Set(prev).add(event.id)}
+            // )}
         } catch {
             alert('Failed to save event.')
         }
@@ -104,15 +115,11 @@ export default function SearchPage() {
             )}
 
             {results && (
-
-
-
-
                 <div className="flex flex-col min-h-screen">
                     <p className="text-sm text-gray-500 mb-4">
                         {results.total} events found
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                         {results.events.map(event => (
                             <div
                                 key={event.id}
